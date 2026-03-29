@@ -59,12 +59,12 @@ DEFAULT_WEIGHTS = {
 # With SD=0.8, the Gaussian scored EVERY buyer 99.9-100 (zero discrimination)
 # Actual data SD is 0.015 — using 0.015 for tight discrimination
 DEFAULT_MARKET_SD = {
-    "ppu":      80_000,       # Tightened from 100K (optimizer confirmed)
+    "ppu":      80_000,       # Tightened from 100K 
     "ppsf":     100,
-    "cap_rate": 0.010,        # Tightened from 0.015 (optimizer found 0.01)
-    "grm":      2.0,          # Tightened from 2.5 (optimizer found 2.0)
-    "price":    800_000,      # Tightened from 1M (optimizer confirmed)
-    "units":    2,            # Tight — 2-unit SD means ±2 units scores well
+    "cap_rate": 0.010,        # Tightened from 0.015 
+    "grm":      2.0,          # Tightened from 2.5 
+    "price":    800_000,      # Tightened from 1M 
+    "units":    4,            # Loosened from 2 to allow wider size jumps
 }
 
 # ── Velocity Score Thresholds (24-month window) ─────────────────────────
