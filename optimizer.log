@@ -5,3 +5,4 @@ Loaded 4839 real LA transactions.
 Entering optimization loop...
 [iter 2] NEW BEST: 57.40% | Test cases: 216 | Median rank: 4 | Elapsed: 0h00m | Improvements: 1
 [iter 15] NEW BEST: 57.90% | Test cases: 216 | Median rank: 4 | Elapsed: 0h06m | Improvements: 2
+[iter 17] NEW BEST: 58.30% | Test cases: 216 | Median rank: 4 | Elapsed: 0h07m | Improvements: 3
