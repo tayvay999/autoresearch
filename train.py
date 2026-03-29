@@ -42,16 +42,16 @@ REPEAT_CAP = 98
 # ── v5.0 Weights Distribution (10 dimensions, sum to 1.0) ──────────────
 # Optimized via grid-search backtesting: 30.6% top-10 accuracy (was 12.2% in v4.5)
 DEFAULT_WEIGHTS = {
-    "submarket":       0.22,
-    "velocity":        0.10,
-    "ppu":             0.20,
-    "units":           0.15,
-    "cap_rate":        0.05,
-    "price":           0.10,
-    "recency":         0.03,
-    "grm":             0.05,
-    "strategy":        0.09,
-    "ppsf":            0.01,
+    "submarket": 0.2376,
+    "velocity": 0.1080,
+    "ppu": 0.2160,
+    "units": 0.1284,
+    "cap_rate": 0.0143,
+    "price": 0.1080,
+    "recency": 0.0256,
+    "grm": 0.0540,
+    "strategy": 0.0972,
+    "ppsf": 0.0108,
 }
 
 # ── v5.0 Market Standard Deviations ────────────────────────────────────
@@ -59,12 +59,12 @@ DEFAULT_WEIGHTS = {
 # With SD=0.8, the Gaussian scored EVERY buyer 99.9-100 (zero discrimination)
 # Actual data SD is 0.015 — using 0.015 for tight discrimination
 DEFAULT_MARKET_SD = {
-    "ppu":      80_000,       # Tightened from 100K 
-    "ppsf":     100,
-    "cap_rate": 0.010,        # Tightened from 0.015 
-    "grm":      2.0,          # Tightened from 2.5 
-    "price":    800_000,      # Tightened from 1M 
-    "units":    4,            # Loosened from 2 to allow wider size jumps
+    "ppu": 63695.0000,
+    "ppsf": 127,
+    "cap_rate": 0.0100,
+    "grm": 2.0000,
+    "price": 800000,
+    "units": 4,
 }
 
 # ── Velocity Score Thresholds (24-month window) ─────────────────────────
