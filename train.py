@@ -24,7 +24,7 @@ Version: 5.0  (2026-03-29)
 import math
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Any
-from collections import defaultdict
+from collections import defaultdict, Counter
 import statistics
 
 __version__ = "6.0"
@@ -52,6 +52,7 @@ DEFAULT_WEIGHTS = {
     "grm": 0.179847,
     "strategy": 0.139550,
     "ppsf": 0.007798,
+    "deal_size": 0.120000,
 }
 
 # ── v5.0 Market Standard Deviations ────────────────────────────────────
@@ -518,6 +519,44 @@ def score_single_transaction(buyer_metrics, subject, reference_date=None,
     }
 
 
+# ── Deal Size Banding Logic ───────────────────────────────────────────
+DEAL_SIZE_BANDS = [
+    (0, 2_500_000, "Micro-Cap"),
+    (2_500_000, 7_500_000, "Small-Cap"),
+    (7_500_000, 20_000_000, "Mid-Market"),
+    (20_000_000, float('inf'), "Institutional"),
+]
+
+def get_deal_size_band(price: float) -> int:
+    """Returns the index of the price band (0 to 3)."""
+    for i, (low, high, _) in enumerate(DEAL_SIZE_BANDS):
+        if low <= price < high:
+            return i
+    return len(DEAL_SIZE_BANDS) - 1
+
+def size_affinity_score(buyer_transactions: List[Dict], subject_price: float) -> float:
+    """Scores how well a buyer's historical deal sizes match the subject property's bucket."""
+    if not buyer_transactions:
+        return 50.0
+
+    subject_band = get_deal_size_band(subject_price)
+    
+    # Calculate buyer's primary band (majority of deals)
+    band_counts = Counter([get_deal_size_band(t.get("price", 0)) for t in buyer_transactions])
+    primary_band = band_counts.most_common(1)[0][0]
+    
+    # Distance-based scoring
+    distance = abs(primary_band - subject_band)
+    if distance == 0:
+        return 100.0  # Perfect fit
+    elif distance == 1:
+        return 70.0   # Adjacent bucket
+    elif distance == 2:
+        return 35.0   # Large jump
+    else:
+        return 10.0   # Institutional vs Micro Mismatch
+
+
 def score_buyer_aggregate(buyer_transactions, subject, reference_date=None,
                          market_sd=None, weights=None):
     """60% best transaction + 40% recency-weighted average, plus buyer-level signals."""
@@ -565,17 +604,32 @@ def score_buyer_aggregate(buyer_transactions, subject, reference_date=None,
     avg_recency_weighted = (sum(recency_weighted_scores) / len(recency_weighted_scores)
                            if recency_weighted_scores else 0.0)
 
+    # Initial composite from transactions
     composite = BEST_DEAL_WEIGHT * best_txn_score + AVG_DEAL_WEIGHT * avg_recency_weighted
 
-    # sale_dates and vel computed above
+    # deal_size banding score (aggregate level)
+    sub_price = subject.get("price")
+    if isinstance(sub_price, dict):
+        mid_price = sub_price.get("mid", 0)
+    else:
+        mid_price = float(sub_price or 0)
+        
+    ds_score = size_affinity_score(buyer_transactions, mid_price)
     strat = strategy_alignment_score(buyer_transactions, subject)
 
+    # Weights
     velocity_weight = w.get("velocity", 0.10)
     strategy_weight = w.get("strategy", 0.04)
+    deal_size_weight = w.get("deal_size", 0.10)
 
-    composite = (composite * (1 - velocity_weight - strategy_weight) +
+    # Combine weighted aggregate scores
+    # Rescale other components to accommodate the new deal_size dimension
+    agg_weight_sum = velocity_weight + strategy_weight + deal_size_weight
+    
+    composite = (composite * (1 - agg_weight_sum) +
                 vel * velocity_weight +
-                strat * strategy_weight)
+                strat * strategy_weight +
+                ds_score * deal_size_weight)
 
     return {
         "composite": round(composite, 1),
@@ -583,6 +637,7 @@ def score_buyer_aggregate(buyer_transactions, subject, reference_date=None,
         "avg_recency_weighted": round(avg_recency_weighted, 1),
         "velocity": round(vel, 1),
         "strategy": round(strat, 1),
+        "deal_size": round(ds_score, 1),
         "n_transactions": len(buyer_transactions),
         "txn_results": txn_results,
     }
