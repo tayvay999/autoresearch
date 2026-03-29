@@ -1,15 +1,6 @@
 Starting 5-Hour Empirical Auto-Optimization Loop!
-Baseline: 56.9%
+Baseline: 61.6%
 Loading empirical CoStar dataset...
 Loaded 4839 real LA transactions.
 Entering optimization loop...
-[iter 2] NEW BEST: 57.40% | Test cases: 216 | Median rank: 4 | Elapsed: 0h00m | Improvements: 1
-[iter 15] NEW BEST: 57.90% | Test cases: 216 | Median rank: 4 | Elapsed: 0h06m | Improvements: 2
-[iter 17] NEW BEST: 58.30% | Test cases: 216 | Median rank: 4 | Elapsed: 0h07m | Improvements: 3
-[iter 20] NEW BEST: 58.80% | Test cases: 216 | Median rank: 4 | Elapsed: 0h08m | Improvements: 4
-[iter 39] NEW BEST: 59.70% | Test cases: 216 | Median rank: 4 | Elapsed: 0h16m | Improvements: 5
-[iter 50] NEW BEST: 60.20% | Test cases: 216 | Median rank: 4 | Elapsed: 0h21m | Improvements: 6
-[iter 102] NEW BEST: 60.60% | Test cases: 216 | Median rank: 4 | Elapsed: 0h43m | Improvements: 7
-[iter 104] NEW BEST: 61.10% | Test cases: 216 | Median rank: 4 | Elapsed: 0h44m | Improvements: 8
-[iter 108] NEW BEST: 61.60% | Test cases: 216 | Median rank: 4 | Elapsed: 0h46m | Improvements: 9
-[iter 142] NEW BEST: 62.00% | Test cases: 216 | Median rank: 4 | Elapsed: 1h00m | Improvements: 10
+[iter 2] NEW BEST: 62.00% | Test cases: 216 | Median rank: 4 | Elapsed: 0h00m | Improvements: 1
