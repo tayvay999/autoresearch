@@ -42,16 +42,16 @@ REPEAT_CAP = 98
 # ── v5.0 Weights Distribution (10 dimensions, sum to 1.0) ──────────────
 # Optimized via grid-search backtesting: 30.6% top-10 accuracy (was 12.2% in v4.5)
 DEFAULT_WEIGHTS = {
-    "submarket": 0.1915,
-    "velocity": 0.1065,
-    "ppu": 0.2141,
-    "units": 0.0163,
-    "cap_rate": 0.0451,
-    "price": 0.1065,
-    "recency": 0.0265,
-    "grm": 0.1859,
-    "strategy": 0.0970,
-    "ppsf": 0.0106,
+    "submarket": 0.1857,
+    "velocity": 0.1032,
+    "ppu": 0.2315,
+    "units": 0.0158,
+    "cap_rate": 0.0437,
+    "price": 0.1032,
+    "recency": 0.0323,
+    "grm": 0.1802,
+    "strategy": 0.0940,
+    "ppsf": 0.0103,
 }
 
 # ── v5.0 Market Standard Deviations ────────────────────────────────────
@@ -60,7 +60,7 @@ DEFAULT_WEIGHTS = {
 # Actual data SD is 0.015 — using 0.015 for tight discrimination
 DEFAULT_MARKET_SD = {
     "ppu": 63188.8280,
-    "ppsf": 137,
+    "ppsf": 102,
     "cap_rate": 0.0160,
     "grm": 1.1460,
     "price": 1000227.2560,
