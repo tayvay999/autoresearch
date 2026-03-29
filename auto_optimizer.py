@@ -49,8 +49,8 @@ def dict_to_str(d):
 print("Loading synthetic dataset...")
 transactions = prepare.get_data()
 
-# Use slightly larger subset for the genetic optimization to avoid overfitting to just 200
-subset = transactions[:400]
+# Use robust empirical subset (the last 1000 deals chronologically)
+subset = transactions[-1000:]
 
 iterations = 0
 mutations_since_last_best = 0

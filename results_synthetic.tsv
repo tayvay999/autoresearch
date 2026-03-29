@@ -1,0 +1,23 @@
+commit	accuracy_top_10	status	description
+baseline	47.10	keep	baseline v6.0 logic
+exp1_wgt	50.60	keep	Emphasized PPU and Submarket, decreased Cap Rate
+exp2_clust	50.00	discard	Boost Portfolio Clustering strategy points
+exp3_unt	51.20	keep	Loosened unit SD from 2 to 4
+8816e3	51.40	keep	Genetic Opt: Acc up to 51.40%
+6637ac	52.20	keep	Genetic Opt: Acc up to 52.20%
+97bcfb	52.50	keep	Genetic Opt: Acc up to 52.50%
+995912	53.00	keep	Genetic Opt: Acc up to 53.00%
+d8e4d2	53.20	keep	Genetic Opt: Acc up to 53.20%
+c14f94	53.50	keep	Genetic Opt: Acc up to 53.50%
+2787f8	54.50	keep	Genetic Opt: Acc up to 54.50%
+420a38	56.80	keep	Genetic Opt: Acc up to 56.80%
+f262bf	57.10	keep	Genetic Opt: Acc up to 57.10%
+01e1ef	57.60	keep	Genetic Opt: Acc up to 57.60%
+42d730	58.10	keep	Genetic Opt: Acc up to 58.10%
+4e004c	58.70	keep	Genetic Opt: Acc up to 58.70%
+4a42a3	58.90	keep	Genetic Opt: Acc up to 58.90%
+a51c15	59.20	keep	Genetic Opt: Acc up to 59.20%
+3141ed	59.40	keep	Genetic Opt: Acc up to 59.40%
+da770c	59.90	keep	Genetic Opt: Acc up to 59.90%
+e85ef2	60.20	keep	Genetic Opt: Acc up to 60.20%
+5b8242	60.50	keep	Genetic Opt: Acc up to 60.50%
