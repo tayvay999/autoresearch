@@ -42,16 +42,16 @@ REPEAT_CAP = 98
 # ── v5.0 Weights Distribution (10 dimensions, sum to 1.0) ──────────────
 # Optimized via grid-search backtesting: 30.6% top-10 accuracy (was 12.2% in v4.5)
 DEFAULT_WEIGHTS = {
-    "submarket":       0.18,   # Co-#1 — strongest discriminator + backtest signal
-    "velocity":        0.18,   # Co-#1 — repeat buyers are the #1 predictor of future buys
-    "ppu":             0.15,   # Per-door budget match (★★★ discriminator)
-    "units":           0.12,   # NEW — buyers buy similar building sizes
-    "cap_rate":        0.10,   # Fixed SD unlocked discrimination; optimizer says 10%
-    "price":           0.10,   # Total capital match
-    "recency":         0.07,   # Moderate discriminator
-    "grm":             0.05,   # Demoted: 51% missing data
-    "strategy":        0.04,   # Low discrimination — keep small
-    "ppsf":            0.01,   # Near-zero signal contribution
+    "submarket":       0.22,
+    "velocity":        0.10,
+    "ppu":             0.20,
+    "units":           0.15,
+    "cap_rate":        0.05,
+    "price":           0.10,
+    "recency":         0.03,
+    "grm":             0.05,
+    "strategy":        0.09,
+    "ppsf":            0.01,
 }
 
 # ── v5.0 Market Standard Deviations ────────────────────────────────────
