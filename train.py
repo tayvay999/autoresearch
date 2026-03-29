@@ -406,6 +406,23 @@ def strategy_alignment_score(buyer_transactions, subject_deal):
                 points -= 5
             checks += 1
 
+    # Check 5: Archetype Tag Matching (NEW in V2)
+    # Checks for specialized interests like ADU or Development
+    subject_tags = subject_deal.get("tags", [])
+    if subject_tags:
+        # Collect all tags from buyer's history
+        buyer_tag_counts = Counter()
+        for t in buyer_transactions:
+            for tag in t.get("tags", []):
+                buyer_tag_counts[tag] += 1
+        
+        for s_tag in subject_tags:
+            if buyer_tag_counts[s_tag] >= 2:
+                points += 15
+            elif buyer_tag_counts[s_tag] == 1:
+                points += 7
+        checks += 1
+
     if checks > 0:
         score = 50.0 + min(50.0, max(-50.0, points))
 
@@ -478,8 +495,21 @@ def score_single_transaction(buyer_metrics, subject, reference_date=None,
     for metric in ["ppu", "ppsf", "cap_rate", "grm", "price"]:
         val = buyer_metrics.get(metric)
         sub = subject.get(metric, {})
+        
+        # V2: Missing Data Plugging Logic
+        # If the metric is missing in the transaction, try to use the submarket average ("plug")
+        is_plugged = False
+        if not val and metric in ["cap_rate", "grm"]:
+            plug_val = buyer_metrics.get(f"plug_{metric}")
+            if plug_val:
+                val = plug_val
+                is_plugged = True
+
         if sub and val:
-            dim_scores[metric] = peaked_score(val, sub["low"], sub["high"], sub["mid"], sd[metric])
+            score = peaked_score(val, sub["low"], sub["high"], sub["mid"], sd[metric])
+            if is_plugged and score is not None:
+                score *= 0.85 # 15% discount for being an estimated/plugged value
+            dim_scores[metric] = score
         else:
             dim_scores[metric] = None
 

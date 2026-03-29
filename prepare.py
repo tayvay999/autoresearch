@@ -32,6 +32,14 @@ def get_data():
     exclusions = ['', 'unknown', 'various', 'private', 'individual']
     full_df = full_df[~full_df['Final Buyer'].astype(str).str.lower().isin(exclusions)]
 
+    # Submarket Benchmarking (NEW in V2)
+    # Calculate medians per submarket to "plug the holes" for deals with missing data
+    submarket_stats = full_df.groupby('Submarket Name').agg({
+        'Actual Cap Rate': 'median',
+        'GRM': 'median',
+        'Price Per Unit': 'median'
+    }).to_dict('index')
+
     transactions = []
     for _, row in full_df.iterrows():
         buyer_id = str(row['Final Buyer']).strip()
@@ -43,6 +51,12 @@ def get_data():
             continue
             
         ppu = price / units
+        submarket = str(row.get('Submarket Name', '')).strip()
+        
+        # Calculate submarket "plugs"
+        stats = submarket_stats.get(submarket, {})
+        plug_cap = stats.get('Actual Cap Rate') / 100.0 if stats.get('Actual Cap Rate') else None
+        plug_grm = stats.get('GRM') if stats.get('GRM') else None
         
         # Parse numeric edge cases
         ppsf = float(row['Price Per SF']) if 'Price Per SF' in row and pd.notna(row['Price Per SF']) else None
@@ -54,18 +68,28 @@ def get_data():
         
         vacancy = float(row['Vacancy']) / 100.0 if 'Vacancy' in row and pd.notna(row['Vacancy']) else 0.05
         
+        # Extract Architecture / Archetype Tags (NEW in V2)
+        amenities = str(row.get('Amenities', '')).lower()
+        tags = []
+        if any(w in amenities for w in ['adu', 'permitted', 'plan', 'ready to issue']):
+            tags.append('ADU_Potential')
+        if any(w in amenities for w in ['land', 'development', 'zoning', 't-o-c']):
+            tags.append('Development')
+        if 'laundry' in amenities:
+            tags.append('Laundry')
+
         date = pd.to_datetime(row.get('Sale Date'))
         date_str = date.strftime("%Y-%m-%d") if pd.notna(date) else "2024-01-01"
-        
-        submarket = str(row.get('Submarket Name', '')).strip()
         
         # Determine Value-Add or Stabilized Empirically
         is_value_add = False
         if pd.notna(vacancy) and vacancy > 0.15:
             is_value_add = True
-        elif cap_rate is not None and 0.0 < cap_rate < 0.045:  # Buying sub-4.5 cap usually implies value-add
+        elif cap_rate is not None and 0.0 < cap_rate < 0.045:
             is_value_add = True
         elif year_built is not None and year_built < 1980 and ppu < 250000:
+            is_value_add = True
+        elif 'ADU_Potential' in tags or 'Development' in tags:
             is_value_add = True
             
         strategy = "Value-Add" if is_value_add else "Stabilized"
@@ -82,7 +106,10 @@ def get_data():
             "ppu": ppu,
             "ppsf": ppsf,
             "year_built": year_built,
-            "vacancy_pct": vacancy
+            "vacancy_pct": vacancy,
+            "tags": tags,
+            "plug_cap": plug_cap,
+            "plug_grm": plug_grm
         }
         transactions.append(t)
         
