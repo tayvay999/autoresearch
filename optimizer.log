@@ -11,3 +11,4 @@ Entering optimization loop...
 [iter 50] NEW BEST: 60.20% | Test cases: 216 | Median rank: 4 | Elapsed: 0h21m | Improvements: 6
 [iter 102] NEW BEST: 60.60% | Test cases: 216 | Median rank: 4 | Elapsed: 0h43m | Improvements: 7
 [iter 104] NEW BEST: 61.10% | Test cases: 216 | Median rank: 4 | Elapsed: 0h44m | Improvements: 8
+[iter 108] NEW BEST: 61.60% | Test cases: 216 | Median rank: 4 | Elapsed: 0h46m | Improvements: 9
